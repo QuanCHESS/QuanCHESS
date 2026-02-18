@@ -4,417 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chess Engines Battle - Giống chess.com</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-        }
-
-        body {
-            background: #2b2b2b;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1400px;
-            width: 100%;
-            background: #262421;
-            border-radius: 8px;
-            padding: 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        /* Header giống chess.com */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #404040;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-icon {
-            background: #81b64c;
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-        }
-
-        .logo-text {
-            color: white;
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .nav-btn {
-            background: #3a3a3a;
-            color: #b0b0b0;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .nav-btn:hover {
-            background: #4a4a4a;
-            color: white;
-        }
-
-        .nav-btn.active {
-            background: #4a4a4a;
-            color: white;
-        }
-
-        /* Main content */
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 320px;
-            gap: 24px;
-        }
-
-        /* Chess board section */
-        .board-section {
-            background: #302e2a;
-            border-radius: 8px;
-            padding: 20px;
-        }
-
-        .board-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .player-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .player-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: #3a3a3a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: white;
-        }
-
-        .player-details {
-            color: white;
-        }
-
-        .player-name {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .player-rating {
-            font-size: 14px;
-            color: #b0b0b0;
-        }
-
-        .engine-badge {
-            background: #81b64c;
-            color: white;
-            font-size: 12px;
-            padding: 2px 8px;
-            border-radius: 12px;
-            margin-left: 8px;
-        }
-
-        .time-white, .time-black {
-            background: #3a3a3a;
-            padding: 8px 16px;
-            border-radius: 6px;
-            color: white;
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .board-container {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .chess-board {
-            display: grid;
-            grid-template-columns: repeat(8, 1fr);
-            width: 560px;
-            height: 560px;
-            border: 2px solid #404040;
-            border-radius: 4px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .square {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 42px;
-            cursor: default;
-            transition: background-color 0.2s;
-            position: relative;
-        }
-
-        .square.light {
-            background-color: #f0d9b5;
-        }
-
-        .square.dark {
-            background-color: #b58863;
-        }
-
-        .square.selected {
-            background-color: #b9ca43;
-        }
-
-        .square.possible-move::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 50%;
-        }
-
-        .square.last-move {
-            background-color: rgba(255, 255, 0, 0.3);
-        }
-
-        .piece {
-            cursor: default;
-            user-select: none;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Controls */
-        .game-controls {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-
-        .control-btn {
-            background: #3a3a3a;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .control-btn:hover {
-            background: #4a4a4a;
-        }
-
-        .control-btn.primary {
-            background: #81b64c;
-            color: white;
-        }
-
-        .control-btn.primary:hover {
-            background: #6fa33b;
-        }
-
-        /* Side panel */
-        .side-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        /* Engine settings */
-        .engine-settings {
-            background: #302e2a;
-            border-radius: 8px;
-            padding: 20px;
-        }
-
-        .section-title {
-            color: white;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-
-        .engine-select {
-            background: #3a3a3a;
-            border: 1px solid #4a4a4a;
-            color: white;
-            padding: 10px;
-            border-radius: 6px;
-            width: 100%;
-            margin-bottom: 12px;
-            font-size: 14px;
-        }
-
-        .engine-item {
-            background: #3a3a3a;
-            border-radius: 6px;
-            padding: 12px;
-            margin-bottom: 12px;
-        }
-
-        .engine-item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .engine-name {
-            color: white;
-            font-weight: 500;
-        }
-
-        .engine-color {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-        }
-
-        .engine-color.white {
-            background: #f0d9b5;
-        }
-
-        .engine-color.black {
-            background: #b58863;
-        }
-
-        .engine-stats {
-            color: #b0b0b0;
-            font-size: 13px;
-        }
-
-        /* Move list */
-        .move-list {
-            background: #302e2a;
-            border-radius: 8px;
-            padding: 20px;
-            height: 300px;
-            overflow-y: auto;
-        }
-
-        .moves-container {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .move-row {
-            display: grid;
-            grid-template-columns: 40px 1fr 1fr;
-            color: #b0b0b0;
-            font-size: 14px;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-
-        .move-row:hover {
-            background: #3a3a3a;
-        }
-
-        .move-number {
-            color: #808080;
-        }
-
-        .move-white, .move-black {
-            color: white;
-        }
-
-        /* Status */
-        .game-status {
-            background: #302e2a;
-            border-radius: 8px;
-            padding: 16px;
-            text-align: center;
-        }
-
-        .status-text {
-            color: white;
-            font-size: 18px;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-
-        .engine-thinking {
-            color: #81b64c;
-            font-size: 14px;
-            display: none;
-        }
-
-        .engine-thinking.visible {
-            display: block;
-        }
-
-        /* Footer */
-        .footer {
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px solid #404040;
-            text-align: center;
-            color: #808080;
-            font-size: 14px;
-        }
-
-        .footer a {
-            color: #81b64c;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <!-- Header -->
         <div class="header">
             <div class="logo">
-                <div class="logo-icon">♟️</div>
+                <div class="logo-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#81b64c" stroke="#81b64c" stroke-width="2"/>
+                        <path d="M2 17L12 22L22 17" stroke="#81b64c" stroke-width="2" fill="none"/>
+                        <path d="M2 12L12 17L22 12" stroke="#81b64c" stroke-width="2" fill="none"/>
+                        <circle cx="12" cy="7" r="2" fill="white"/>
+                    </svg>
+                </div>
                 <div class="logo-text">Chess Battle</div>
             </div>
             <div class="nav-buttons">
@@ -422,6 +27,11 @@
                 <button class="nav-btn">Engines</button>
                 <button class="nav-btn">Settings</button>
                 <button class="nav-btn">Analysis</button>
+                <button class="nav-btn">Learn</button>
+            </div>
+            <div class="user-menu">
+                <button class="user-btn">Sign In</button>
+                <button class="user-btn primary">Sign Up</button>
             </div>
         </div>
 
@@ -431,551 +41,179 @@
             <div class="board-section">
                 <div class="board-header">
                     <div class="player-info">
-                        <div class="player-avatar">🤖</div>
+                        <div class="player-avatar" style="background: #2a2a2a;">
+                            <img src="https://images.chesscomfiles.com/uploads/v1/user/36119035.3b7f9a9c.50x50o.6722a9c78078.png" alt="Engine" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'48\' height=\'48\' viewBox=\'0 0 48 48\'><circle cx=\'24\' cy=\'24\' r=\'24\' fill=\'%23333\'/><text x=\'24\' y=\'32\' font-size=\'20\' text-anchor=\'middle\' fill=\'white\' font-family=\'Arial\'>🤖</text></svg>'">
+                        </div>
                         <div class="player-details">
                             <div class="player-name">
-                                Engine Black
-                                <span class="engine-badge">Stockfish 15</span>
+                                Black Engine
+                                <span class="engine-badge" id="blackEngineName">Stockfish 15</span>
                             </div>
-                            <div class="player-rating">3200 • Computer</div>
+                            <div class="player-rating">
+                                <span class="rating-value">3550</span>
+                                <span class="rating-label">• Computer</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="time-black" id="blackTime">10:00</div>
+                    <div class="time-container black" id="blackTime">10:00</div>
                 </div>
 
                 <div class="board-container">
-                    <div class="chess-board" id="chessBoard"></div>
+                    <div class="board-coordinates files">
+                        <span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span>
+                    </div>
+                    <div class="board-wrapper">
+                        <div class="board-coordinates ranks">
+                            <span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                        </div>
+                        <div class="chess-board" id="chessBoard"></div>
+                    </div>
                 </div>
 
-                <div class="board-header" style="margin-top: 16px; margin-bottom: 0;">
+                <div class="board-header" style="margin-top: 16px;">
                     <div class="player-info">
-                        <div class="player-avatar">🤖</div>
+                        <div class="player-avatar" style="background: #2a2a2a;">
+                            <img src="https://images.chesscomfiles.com/uploads/v1/user/34784348.0f1c4ac5.50x50o.06170cd30a95.png" alt="Engine" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'48\' height=\'48\' viewBox=\'0 0 48 48\'><circle cx=\'24\' cy=\'24\' r=\'24\' fill=\'%23333\'/><text x=\'24\' y=\'32\' font-size=\'20\' text-anchor=\'middle\' fill=\'white\' font-family=\'Arial\'>🤖</text></svg>'">
+                        </div>
                         <div class="player-details">
                             <div class="player-name">
-                                Engine White
-                                <span class="engine-badge">LeelaZero</span>
+                                White Engine
+                                <span class="engine-badge" id="whiteEngineName">Leela Zero</span>
                             </div>
-                            <div class="player-rating">3300 • Computer</div>
+                            <div class="player-rating">
+                                <span class="rating-value">3600</span>
+                                <span class="rating-label">• Computer</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="time-white" id="whiteTime">10:00</div>
+                    <div class="time-container white" id="whiteTime">10:00</div>
                 </div>
 
                 <div class="game-controls">
-                    <button class="control-btn" id="newGameBtn">🔄 New Game</button>
-                    <button class="control-btn" id="pauseBtn">⏸️ Pause</button>
-                    <button class="control-btn primary" id="startBtn">▶️ Start Battle</button>
+                    <button class="control-btn" id="newGameBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 4v6h6"/>
+                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                        </svg>
+                        New Game
+                    </button>
+                    <button class="control-btn" id="pauseBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="6" y="4" width="4" height="16"/>
+                            <rect x="14" y="4" width="4" height="16"/>
+                        </svg>
+                        Pause
+                    </button>
+                    <button class="control-btn primary" id="startBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                        Start Battle
+                    </button>
+                    <button class="control-btn" id="flipBoardBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        Flip
+                    </button>
                 </div>
             </div>
 
             <!-- Side Panel -->
             <div class="side-panel">
                 <div class="engine-settings">
-                    <div class="section-title">Engine Settings</div>
-                    <select class="engine-select" id="whiteEngine">
-                        <option value="stockfish">Stockfish 15 (White)</option>
-                        <option value="leela" selected>LeelaZero (White)</option>
-                        <option value="komodo">Komodo Dragon (White)</option>
-                    </select>
-                    <select class="engine-select" id="blackEngine">
-                        <option value="stockfish" selected>Stockfish 15 (Black)</option>
-                        <option value="leela">LeelaZero (Black)</option>
-                        <option value="komodo">Komodo Dragon (Black)</option>
-                    </select>
-                    
-                    <div class="engine-item">
-                        <div class="engine-item-header">
-                            <span class="engine-name">Stockfish 15</span>
-                            <div class="engine-color white"></div>
-                        </div>
-                        <div class="engine-stats">Depth: 20/20 • Score: +0.3</div>
+                    <div class="section-title">
+                        <span>Engine Settings</span>
+                        <span class="settings-icon">⚙️</span>
                     </div>
                     
-                    <div class="engine-item">
-                        <div class="engine-item-header">
-                            <span class="engine-name">LeelaZero</span>
-                            <div class="engine-color black"></div>
+                    <div class="engine-selector">
+                        <label>White Engine</label>
+                        <select class="engine-select" id="whiteEngine">
+                            <option value="stockfish">Stockfish 15 (ELO 3550)</option>
+                            <option value="leela" selected>Leela Zero (ELO 3600)</option>
+                            <option value="komodo">Komodo Dragon (ELO 3500)</option>
+                            <option value="alphazero">AlphaZero (ELO 3700)</option>
+                        </select>
+                    </div>
+
+                    <div class="engine-selector">
+                        <label>Black Engine</label>
+                        <select class="engine-select" id="blackEngine">
+                            <option value="stockfish" selected>Stockfish 15 (ELO 3550)</option>
+                            <option value="leela">Leela Zero (ELO 3600)</option>
+                            <option value="komodo">Komodo Dragon (ELO 3500)</option>
+                            <option value="alphazero">AlphaZero (ELO 3700)</option>
+                        </select>
+                    </div>
+
+                    <div class="engine-stats-panel">
+                        <div class="engine-stat-item">
+                            <div class="engine-stat-header">
+                                <span class="engine-stat-name" id="whiteStatName">Leela Zero</span>
+                                <span class="engine-stat-elo">3600</span>
+                            </div>
+                            <div class="engine-progress">
+                                <div class="progress-bar" style="width: 65%"></div>
+                            </div>
+                            <div class="engine-stat-details">
+                                <span>Depth: 22/24</span>
+                                <span>Score: +0.4</span>
+                            </div>
                         </div>
-                        <div class="engine-stats">Depth: 18/20 • Score: -0.3</div>
+                        
+                        <div class="engine-stat-item">
+                            <div class="engine-stat-header">
+                                <span class="engine-stat-name" id="blackStatName">Stockfish 15</span>
+                                <span class="engine-stat-elo">3550</span>
+                            </div>
+                            <div class="engine-progress">
+                                <div class="progress-bar" style="width: 48%"></div>
+                            </div>
+                            <div class="engine-stat-details">
+                                <span>Depth: 20/24</span>
+                                <span>Score: -0.4</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="move-list">
-                    <div class="section-title">Move History</div>
+                    <div class="section-title">
+                        <span>Move History</span>
+                        <span class="move-count" id="moveCount">0 moves</span>
+                    </div>
                     <div class="moves-container" id="moveList">
-                        <div class="move-row">
-                            <span class="move-number">1.</span>
-                            <span class="move-white">e4</span>
-                            <span class="move-black">e5</span>
-                        </div>
-                        <div class="move-row">
-                            <span class="move-number">2.</span>
-                            <span class="move-white">Nf3</span>
-                            <span class="move-black">Nc6</span>
-                        </div>
-                        <div class="move-row">
-                            <span class="move-number">3.</span>
-                            <span class="move-white">Bb5</span>
-                            <span class="move-black">a6</span>
-                        </div>
+                        <!-- Moves will be added here dynamically -->
                     </div>
                 </div>
 
                 <div class="game-status">
+                    <div class="status-icon">⚡</div>
                     <div class="status-text" id="gameStatus">Battle Ready</div>
-                    <div class="engine-thinking" id="engineThinking">🤖 Engine is thinking...</div>
+                    <div class="engine-thinking" id="engineThinking">
+                        <div class="thinking-spinner"></div>
+                        <span>Engine is thinking...</span>
+                    </div>
+                    <div class="position-eval" id="positionEval">+0.2</div>
                 </div>
             </div>
         </div>
 
         <!-- Footer -->
         <div class="footer">
-            <p>Chess Engines Battle • Giao diện lấy cảm hứng từ chess.com • <a href="https://github.com" target="_blank">View on GitHub</a></p>
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Engines</a>
+                <a href="#">Help</a>
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+            </div>
+            <p>© 2024 Chess Battle • Giao diện lấy cảm hứng từ chess.com • <a href="https://github.com" target="_blank">View on GitHub</a></p>
         </div>
     </div>
 
-    <script>
-        // Chess game logic
-        class ChessGame {
-            constructor() {
-                this.board = this.createInitialBoard();
-                this.currentPlayer = 'w';
-                this.selectedSquare = null;
-                this.possibleMoves = [];
-                this.moveHistory = [];
-                this.gameOver = false;
-                this.engineThinking = false;
-                this.lastMove = null;
-                
-                // Time controls (10 minutes each)
-                this.whiteTime = 600;
-                this.blackTime = 600;
-                this.timerInterval = null;
-                
-                this.renderBoard();
-                this.setupEventListeners();
-            }
-
-            createInitialBoard() {
-                return [
-                    ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
-                    ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
-                    ['', '', '', '', '', '', '', ''],
-                    ['', '', '', '', '', '', '', ''],
-                    ['', '', '', '', '', '', '', ''],
-                    ['', '', '', '', '', '', '', ''],
-                    ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-                    ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
-                ];
-            }
-
-            renderBoard() {
-                const boardElement = document.getElementById('chessBoard');
-                boardElement.innerHTML = '';
-
-                for (let row = 0; row < 8; row++) {
-                    for (let col = 0; col < 8; col++) {
-                        const square = document.createElement('div');
-                        square.className = `square ${(row + col) % 2 === 0 ? 'light' : 'dark'}`;
-                        square.dataset.row = row;
-                        square.dataset.col = col;
-
-                        // Highlight selected square
-                        if (this.selectedSquare && 
-                            this.selectedSquare.row === row && 
-                            this.selectedSquare.col === col) {
-                            square.classList.add('selected');
-                        }
-
-                        // Highlight last move
-                        if (this.lastMove && 
-                            ((this.lastMove.from.row === row && this.lastMove.from.col === col) ||
-                             (this.lastMove.to.row === row && this.lastMove.to.col === col))) {
-                            square.classList.add('last-move');
-                        }
-
-                        // Highlight possible moves
-                        if (this.possibleMoves.some(move => move.row === row && move.col === col)) {
-                            square.classList.add('possible-move');
-                        }
-
-                        // Add piece
-                        const piece = this.board[row][col];
-                        if (piece) {
-                            const pieceElement = document.createElement('span');
-                            pieceElement.className = 'piece';
-                            pieceElement.textContent = this.getPieceSymbol(piece);
-                            square.appendChild(pieceElement);
-                        }
-
-                        boardElement.appendChild(square);
-                    }
-                }
-            }
-
-            getPieceSymbol(piece) {
-                const symbols = {
-                    'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙',
-                    'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟'
-                };
-                return symbols[piece] || '';
-            }
-
-            setupEventListeners() {
-                document.getElementById('chessBoard').addEventListener('click', (e) => {
-                    const square = e.target.closest('.square');
-                    if (!square) return;
-
-                    const row = parseInt(square.dataset.row);
-                    const col = parseInt(square.dataset.col);
-                    
-                    this.handleSquareClick(row, col);
-                });
-
-                document.getElementById('newGameBtn').addEventListener('click', () => {
-                    this.resetGame();
-                });
-
-                document.getElementById('startBtn').addEventListener('click', () => {
-                    this.startBattle();
-                });
-
-                document.getElementById('pauseBtn').addEventListener('click', () => {
-                    this.pauseBattle();
-                });
-            }
-
-            handleSquareClick(row, col) {
-                if (this.gameOver || this.engineThinking) return;
-
-                const piece = this.board[row][col];
-
-                // If no square selected and clicked on a piece of current player
-                if (!this.selectedSquare && piece && this.getPieceColor(piece) === this.currentPlayer) {
-                    this.selectedSquare = { row, col };
-                    this.calculatePossibleMoves(row, col);
-                    this.renderBoard();
-                }
-                // If a square is selected
-                else if (this.selectedSquare) {
-                    // Check if trying to move to a possible move square
-                    if (this.possibleMoves.some(move => move.row === row && move.col === col)) {
-                        this.makeMove(this.selectedSquare.row, this.selectedSquare.col, row, col);
-                    }
-                    
-                    this.selectedSquare = null;
-                    this.possibleMoves = [];
-                    this.renderBoard();
-                }
-            }
-
-            getPieceColor(piece) {
-                return piece === piece.toUpperCase() ? 'w' : 'b';
-            }
-
-            calculatePossibleMoves(row, col) {
-                const piece = this.board[row][col];
-                if (!piece) return;
-
-                this.possibleMoves = [];
-                const pieceType = piece.toLowerCase();
-                const color = this.getPieceColor(piece);
-
-                // Simplified move calculation for demo
-                // In a real app, you'd implement full chess rules
-                for (let i = 0; i < 8; i++) {
-                    for (let j = 0; j < 8; j++) {
-                        if (this.isValidMove(row, col, i, j, pieceType, color)) {
-                            this.possibleMoves.push({ row: i, col: j });
-                        }
-                    }
-                }
-            }
-
-            isValidMove(fromRow, fromCol, toRow, toCol, pieceType, color) {
-                // Very simplified move validation for demo
-                // This is just for UI demonstration
-                const targetPiece = this.board[toRow][toCol];
-                if (targetPiece && this.getPieceColor(targetPiece) === color) return false;
-
-                const rowDiff = Math.abs(toRow - fromRow);
-                const colDiff = Math.abs(toCol - fromCol);
-
-                switch(pieceType) {
-                    case 'p': // Pawn
-                        if (color === 'w') {
-                            return (toRow === fromRow - 1 && toCol === fromCol && !targetPiece) ||
-                                   (fromRow === 6 && toRow === 4 && toCol === fromCol && !targetPiece) ||
-                                   (toRow === fromRow - 1 && Math.abs(toCol - fromCol) === 1 && targetPiece);
-                        } else {
-                            return (toRow === fromRow + 1 && toCol === fromCol && !targetPiece) ||
-                                   (fromRow === 1 && toRow === 3 && toCol === fromCol && !targetPiece) ||
-                                   (toRow === fromRow + 1 && Math.abs(toCol - fromCol) === 1 && targetPiece);
-                        }
-                    case 'n': // Knight
-                        return (rowDiff === 2 && colDiff === 1) || (rowDiff === 1 && colDiff === 2);
-                    case 'b': // Bishop
-                        return rowDiff === colDiff && this.isDiagonalClear(fromRow, fromCol, toRow, toCol);
-                    case 'r': // Rook
-                        return (fromRow === toRow || fromCol === toCol) && this.isStraightClear(fromRow, fromCol, toRow, toCol);
-                    case 'q': // Queen
-                        return (rowDiff === colDiff || fromRow === toRow || fromCol === toCol) && 
-                               (this.isDiagonalClear(fromRow, fromCol, toRow, toCol) || 
-                                this.isStraightClear(fromRow, fromCol, toRow, toCol));
-                    case 'k': // King
-                        return rowDiff <= 1 && colDiff <= 1;
-                    default:
-                        return false;
-                }
-            }
-
-            isDiagonalClear(fromRow, fromCol, toRow, toCol) {
-                // Simplified - assume clear for demo
-                return true;
-            }
-
-            isStraightClear(fromRow, fromCol, toRow, toCol) {
-                // Simplified - assume clear for demo
-                return true;
-            }
-
-            makeMove(fromRow, fromCol, toRow, toCol) {
-                const piece = this.board[fromRow][fromCol];
-                
-                // Record last move
-                this.lastMove = {
-                    from: { row: fromRow, col: fromCol },
-                    to: { row: toRow, col: toCol }
-                };
-
-                // Move piece
-                this.board[toRow][toCol] = piece;
-                this.board[fromRow][fromCol] = '';
-
-                // Add to move history
-                const moveNotation = this.getMoveNotation(piece, fromRow, fromCol, toRow, toCol);
-                this.moveHistory.push({
-                    number: Math.floor(this.moveHistory.length / 2) + 1,
-                    white: this.currentPlayer === 'w' ? moveNotation : this.moveHistory[this.moveHistory.length - 1]?.white,
-                    black: this.currentPlayer === 'b' ? moveNotation : ''
-                });
-
-                // Switch player
-                this.currentPlayer = this.currentPlayer === 'w' ? 'b' : 'w';
-
-                // Update move list display
-                this.updateMoveList();
-                
-                // Render board
-                this.renderBoard();
-
-                // Check if game is over
-                this.checkGameOver();
-
-                // If it's engine's turn, make engine move
-                if (!this.gameOver && this.currentPlayer === 'w') {
-                    this.makeEngineMove('white');
-                } else if (!this.gameOver && this.currentPlayer === 'b') {
-                    this.makeEngineMove('black');
-                }
-            }
-
-            getMoveNotation(piece, fromRow, fromCol, toRow, toCol) {
-                const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-                const ranks = ['8', '7', '6', '5', '4', '3', '2', '1'];
-                
-                const pieceType = piece.toLowerCase();
-                const pieceSymbol = pieceType === 'p' ? '' : piece.toUpperCase();
-                const toFile = files[toCol];
-                const toRank = ranks[toRow];
-                
-                return `${pieceSymbol}${toFile}${toRank}`;
-            }
-
-            updateMoveList() {
-                const moveListElement = document.getElementById('moveList');
-                moveListElement.innerHTML = '';
-
-                for (let i = 0; i < this.moveHistory.length; i += 2) {
-                    const moveRow = document.createElement('div');
-                    moveRow.className = 'move-row';
-                    
-                    const moveNumber = document.createElement('span');
-                    moveNumber.className = 'move-number';
-                    moveNumber.textContent = `${Math.floor(i / 2) + 1}.`;
-                    
-                    const whiteMove = document.createElement('span');
-                    whiteMove.className = 'move-white';
-                    whiteMove.textContent = this.moveHistory[i]?.white || '';
-                    
-                    const blackMove = document.createElement('span');
-                    blackMove.className = 'move-black';
-                    blackMove.textContent = this.moveHistory[i + 1]?.black || '';
-                    
-                    moveRow.appendChild(moveNumber);
-                    moveRow.appendChild(whiteMove);
-                    moveRow.appendChild(blackMove);
-                    
-                    moveListElement.appendChild(moveRow);
-                }
-            }
-
-            checkGameOver() {
-                // Simplified game over check
-                const whiteKing = this.board.some(row => row.includes('K'));
-                const blackKing = this.board.some(row => row.includes('k'));
-
-                if (!whiteKing) {
-                    this.gameOver = true;
-                    document.getElementById('gameStatus').textContent = 'Black wins!';
-                    this.stopTimer();
-                } else if (!blackKing) {
-                    this.gameOver = true;
-                    document.getElementById('gameStatus').textContent = 'White wins!';
-                    this.stopTimer();
-                }
-            }
-
-            makeEngineMove(color) {
-                this.engineThinking = true;
-                document.getElementById('engineThinking').classList.add('visible');
-                document.getElementById('gameStatus').textContent = `${color === 'white' ? 'White' : 'Black'} engine thinking...`;
-
-                // Simulate engine thinking with delay
-                setTimeout(() => {
-                    if (!this.gameOver) {
-                        // Simple random move for demo (in real app, use actual chess engine)
-                        const possibleMoves = this.getAllPossibleMoves(color === 'white' ? 'w' : 'b');
-                        
-                        if (possibleMoves.length > 0) {
-                            const randomMove = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
-                            this.makeMove(randomMove.from.row, randomMove.from.col, randomMove.to.row, randomMove.to.col);
-                        }
-                    }
-                    
-                    this.engineThinking = false;
-                    document.getElementById('engineThinking').classList.remove('visible');
-                    document.getElementById('gameStatus').textContent = 'Battle in progress';
-                }, 1000);
-            }
-
-            getAllPossibleMoves(color) {
-                const moves = [];
-                
-                for (let fromRow = 0; fromRow < 8; fromRow++) {
-                    for (let fromCol = 0; fromCol < 8; fromCol++) {
-                        const piece = this.board[fromRow][fromCol];
-                        if (piece && this.getPieceColor(piece) === color) {
-                            this.calculatePossibleMoves(fromRow, fromCol);
-                            this.possibleMoves.forEach(to => {
-                                moves.push({
-                                    from: { row: fromRow, col: fromCol },
-                                    to: { row: to.row, col: to.col }
-                                });
-                            });
-                        }
-                    }
-                }
-                
-                this.possibleMoves = [];
-                return moves;
-            }
-
-            startTimer() {
-                this.stopTimer();
-                this.timerInterval = setInterval(() => {
-                    if (this.gameOver || this.engineThinking) return;
-                    
-                    if (this.currentPlayer === 'w') {
-                        this.whiteTime--;
-                        this.updateTimerDisplay();
-                        
-                        if (this.whiteTime <= 0) {
-                            this.gameOver = true;
-                            document.getElementById('gameStatus').textContent = 'Black wins on time!';
-                            this.stopTimer();
-                        }
-                    } else {
-                        this.blackTime--;
-                        this.updateTimerDisplay();
-                        
-                        if (this.blackTime <= 0) {
-                            this.gameOver = true;
-                            document.getElementById('gameStatus').textContent = 'White wins on time!';
-                            this.stopTimer();
-                        }
-                    }
-                }, 1000);
-            }
-
-            stopTimer() {
-                if (this.timerInterval) {
-                    clearInterval(this.timerInterval);
-                    this.timerInterval = null;
-                }
-            }
-
-            updateTimerDisplay() {
-                const formatTime = (seconds) => {
-                    const mins = Math.floor(seconds / 60);
-                    const secs = seconds % 60;
-                    return `${mins}:${secs.toString().padStart(2, '0')}`;
-                };
-
-                document.getElementById('whiteTime').textContent = formatTime(this.whiteTime);
-                document.getElementById('blackTime').textContent = formatTime(this.blackTime);
-            }
-
-            resetGame() {
-                this.board = this.createInitialBoard();
-                this.currentPlayer = 'w';
-                this.selectedSquare = null;
-                this.possibleMoves = [];
-                this.moveHistory = [];
-                this.gameOver = false;
-                this.lastMove = null;
-                this.whiteTime = 600;
-                this.blackTime = 600;
-                
-                this.stopTimer();
-                this.updateTimerDisplay();
-                this.renderBoard();
-                this.updateMoveList();
-                document.getElementById('gameStatus').textContent = 'Battle Ready';
-            }
-
-            startBattle() {
-                if (this.gameOver) {
-                    this.resetGame();
-                }
-                this.startTimer();
-                document.getElementById('gameStatus').textContent = 'Battle in progress';
-                
-                // If white is engine, make first move
-                if (this.currentPlayer === 'w') {
-                    this.makeEngineMove('white');
-                }
-            }
-
-            pauseBattle() {
-                this.stopTimer();
-                document.getElementById('gameStatus').textContent = 'Battle Paused';
-            }
-        }
-
-        // Initialize game
-        const game = new ChessGame();
-
-        // Handle engine selection
-        document.getElementById('whiteEngine').addEventListener('change', (e) => {
-            const engineItems = document.querySelectorAll('.engine-item');
-            engineItems[0].querySelector('.engine-name').textContent = e.target.options[e.target.selectedIndex].text;
-        });
-
-        document.getElementById('blackEngine').addEventListener('change', (e) => {
-            const engineItems = document.querySelectorAll('.engine-item');
-            engineItems[1].querySelector('.engine-name').textContent = e.target.options[e.target.selectedIndex].text;
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
