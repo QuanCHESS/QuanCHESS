@@ -17,8 +17,8 @@
     --board-light: #f0d9b5;
     --board-dark: #b58863;
     --highlight-selected: #b9ca43;
-    --highlight-move: rgba(255, 255, 0, 0.3);
-    --highlight-possible: rgba(0, 0, 0, 0.2);
+    --highlight-move: rgba(255, 255, 0, 0.2);
+    --highlight-possible: rgba(0, 0, 0, 0.1);
 }
 
 body {
@@ -62,6 +62,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 28px;
+    color: var(--accent-green);
 }
 
 .logo-text {
@@ -164,14 +166,31 @@ body {
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 2px solid var(--border-color);
 }
 
-.player-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.player-avatar.white-avatar {
+    background: #f0f0f0;
+}
+
+.player-avatar.black-avatar {
+    background: #2a2a2a;
+}
+
+.avatar-icon {
+    font-size: 32px;
+    font-family: 'Noto Serif', serif;
+}
+
+.white-avatar .avatar-icon {
+    color: #000;
+}
+
+.black-avatar .avatar-icon {
+    color: #fff;
 }
 
 .player-details {
@@ -217,10 +236,14 @@ body {
 
 .time-container.white {
     color: #f0d9b5;
+    background: #2a2a2a;
+    border: 1px solid #4a4a4a;
 }
 
 .time-container.black {
     color: #b58863;
+    background: #1a1a1a;
+    border: 1px solid #4a4a4a;
 }
 
 /* Chess Board */
@@ -279,6 +302,8 @@ body {
     transition: all 0.1s ease;
     position: relative;
     user-select: none;
+    font-family: 'Noto Serif', 'Segoe UI', 'Arial', serif;
+    font-weight: 500;
 }
 
 .square.light {
@@ -300,17 +325,44 @@ body {
     height: 20px;
     background: var(--highlight-possible);
     border-radius: 50%;
+    pointer-events: none;
 }
 
 .square.last-move {
     background-color: var(--highlight-move);
 }
 
+/* Màu quân cờ */
 .piece {
     cursor: pointer;
     user-select: none;
-    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
     transition: transform 0.1s ease;
+    line-height: 1;
+    font-family: 'Noto Serif', 'Segoe UI', 'Arial', serif;
+    font-weight: 600;
+}
+
+/* Quân trắng */
+.piece[data-piece="K"],
+.piece[data-piece="Q"],
+.piece[data-piece="R"],
+.piece[data-piece="B"],
+.piece[data-piece="N"],
+.piece[data-piece="P"] {
+    color: #ffffff;
+    text-shadow: 0 0 2px #000, 0 0 4px rgba(0,0,0,0.5);
+}
+
+/* Quân đen */
+.piece[data-piece="k"],
+.piece[data-piece="q"],
+.piece[data-piece="r"],
+.piece[data-piece="b"],
+.piece[data-piece="n"],
+.piece[data-piece="p"] {
+    color: #000000;
+    text-shadow: 0 0 2px #fff, 0 0 4px rgba(255,255,255,0.5);
 }
 
 .piece:hover {
@@ -669,6 +721,10 @@ body {
     
     .board-wrapper .board-coordinates.ranks {
         height: auto;
+    }
+    
+    .square {
+        font-size: 36px;
     }
     
     .game-controls {
