@@ -6,20 +6,15 @@
     <title>Chess Engines Battle - Giống chess.com</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Thêm font chess -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <!-- Header -->
         <div class="header">
             <div class="logo">
-                <div class="logo-icon">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#81b64c" stroke="#81b64c" stroke-width="2"/>
-                        <path d="M2 17L12 22L22 17" stroke="#81b64c" stroke-width="2" fill="none"/>
-                        <path d="M2 12L12 17L22 12" stroke="#81b64c" stroke-width="2" fill="none"/>
-                        <circle cx="12" cy="7" r="2" fill="white"/>
-                    </svg>
-                </div>
+                <div class="logo-icon">♟️</div>
                 <div class="logo-text">Chess Battle</div>
             </div>
             <div class="nav-buttons">
@@ -41,8 +36,8 @@
             <div class="board-section">
                 <div class="board-header">
                     <div class="player-info">
-                        <div class="player-avatar" style="background: #2a2a2a;">
-                            <img src="https://images.chesscomfiles.com/uploads/v1/user/36119035.3b7f9a9c.50x50o.6722a9c78078.png" alt="Engine" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'48\' height=\'48\' viewBox=\'0 0 48 48\'><circle cx=\'24\' cy=\'24\' r=\'24\' fill=\'%23333\'/><text x=\'24\' y=\'32\' font-size=\'20\' text-anchor=\'middle\' fill=\'white\' font-family=\'Arial\'>🤖</text></svg>'">
+                        <div class="player-avatar black-avatar">
+                            <span class="avatar-icon">♚</span>
                         </div>
                         <div class="player-details">
                             <div class="player-name">
@@ -66,14 +61,16 @@
                         <div class="board-coordinates ranks">
                             <span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
                         </div>
-                        <div class="chess-board" id="chessBoard"></div>
+                        <div class="chess-board" id="chessBoard">
+                            <!-- Board sẽ được tạo bằng JavaScript -->
+                        </div>
                     </div>
                 </div>
 
                 <div class="board-header" style="margin-top: 16px;">
                     <div class="player-info">
-                        <div class="player-avatar" style="background: #2a2a2a;">
-                            <img src="https://images.chesscomfiles.com/uploads/v1/user/34784348.0f1c4ac5.50x50o.06170cd30a95.png" alt="Engine" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'48\' height=\'48\' viewBox=\'0 0 48 48\'><circle cx=\'24\' cy=\'24\' r=\'24\' fill=\'%23333\'/><text x=\'24\' y=\'32\' font-size=\'20\' text-anchor=\'middle\' fill=\'white\' font-family=\'Arial\'>🤖</text></svg>'">
+                        <div class="player-avatar white-avatar">
+                            <span class="avatar-icon">♔</span>
                         </div>
                         <div class="player-details">
                             <div class="player-name">
