@@ -15,9 +15,11 @@ class ChessGame {
         this.blackTime = 600;
         this.timerInterval = null;
         
-        // Piece symbols giống chess.com
+        // Piece symbols chuẩn chess
         this.pieceSymbols = {
+            // Quân trắng
             'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙',
+            // Quân đen
             'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟'
         };
         
